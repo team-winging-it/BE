@@ -83,7 +83,7 @@ class CreateDungeon():
                     grid, {'x': room['doorx'], 'y': room['doory']}, 'door')
 
                 placedRooms.append(room)
-        return {grid, placedRooms}
+        return [{grid, placedRooms}]
 
     grid = []
     for i in range(0, 120):  # HERE ##################
@@ -101,7 +101,7 @@ class CreateDungeon():
         'width': random.randrange(min, max)
     }
 
-    grid = placeCells(grid, firstRoom)
+    grid = placeCells(grid, firstRoom, "floor")
 
     # HERE ######################
     def growMap(self, grid, seedRooms, counter=1, maxRooms=30, firstRoom=firstRoom):
@@ -109,6 +109,5 @@ class CreateDungeon():
             return grid
 
         grid = self.createRoomsFromSeed(grid, seedRooms.pop(), range=[7, 12])
-        seedRooms.append([*grid['placedRooms']])
-        counter += len([*grid['placedRooms']])
-        return self.growMap(grid, [firstRoom])
+        seedRooms.append(grid)
+        return self.growMap(grid, seedRooms)
