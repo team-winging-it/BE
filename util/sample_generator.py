@@ -110,4 +110,5 @@ class CreateDungeon():
 
         grid = self.createRoomsFromSeed(grid, seedRooms.pop(), range=[7, 12])
         seedRooms.append(grid)
+        counter += len(grid['placedRooms'])
         return self.growMap(grid, seedRooms)
