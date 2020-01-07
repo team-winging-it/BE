@@ -94,7 +94,7 @@ class CreateDungeon():
         grid.append([])
         for j in range(GRID_WH):
             grid[i].append(
-                {'type': 0, 'opacity': round(random.random(0.3, 0.8), 1)}
+                {'type': 0, 'opacity': random.uniform(0.3, 0.8)}
             )
         i += 1
 
