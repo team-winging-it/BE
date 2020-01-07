@@ -11,8 +11,10 @@ class CreateDungeon():
         self.room = room
 
     def isValidRoomPlacement(self, grid, room):
+
         room['width'] = 1
         room['height'] = 1
+
         if room['y'] < 1 or room['y'] + room['height'] > len(grid) - 1:
             return False
         if room['x'] < 1 or room['x'] + room['width'] > len(grid[0]) - 1:
@@ -25,11 +27,14 @@ class CreateDungeon():
         return True
 
     def placeCells(self, grid, room, type='floor'):
+        # print('grid', grid)
+        # print('room', room)
+        # print('type', type)
         room['width'] = 1
         room['height'] = 1
         for i in range(room['y'], room['y'] + room['height']):
             for j in range(room['x'], room['x'] + room['width']):
-                grid[i][j] = {type, room['id']}
+                grid[i][j]['type'] = type
         return grid
 
     def createRoomsFromSeed(self, grid, room, range):
@@ -107,7 +112,7 @@ class CreateDungeon():
         'width': random.randrange(min, max)
     }
 
-    grid = placeCells(grid, firstRoom, "floor")
+    grid = placeCells(grid, firstRoom)
 
     # HERE ######################
     def growMap(self, grid, seedRooms, counter=1, maxRooms=30, firstRoom=firstRoom):
