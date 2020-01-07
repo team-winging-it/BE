@@ -86,9 +86,13 @@ class CreateDungeon():
 
                 grid = self.placeCells(
                     grid, {'x': room['doorx'], 'y': room['doory']}, 'door')
-
                 placedRooms.append(room)
-        return [{grid, placedRooms}]
+
+        dicti = {}
+        dicti['grid'] = grid
+        dicti['placedRooms'] = placedRooms
+
+        return dicti
 
     grid = []
     GRID_HT = 120
@@ -115,13 +119,13 @@ class CreateDungeon():
     grid = placeCells(grid, firstRoom)
 
     # HERE ######################
-    def growMap(self, grid, seedRooms, counter=1, maxRooms=30, firstRoom=firstRoom):
+    def growMap(self, grid, seedRooms, counter=1, maxRooms=30):
         if counter + len(seedRooms) > maxRooms or len(seedRooms) is None:
             return grid
 
         grid = self.createRoomsFromSeed(grid, seedRooms.pop(), range=[7, 12])
-        seedRooms.append(grid)
-        counter += len(grid.placedRooms)
+        seedRooms.append(*grid['placedRooms'])
+        counter += len(grid['placedRooms'])
         return self.growMap(grid, seedRooms, counter)
 
-    growMap(grid, [firstRoom])
+    growMap(grid=grid, seedRooms=[firstRoom])
