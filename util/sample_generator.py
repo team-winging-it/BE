@@ -90,7 +90,7 @@ class CreateDungeon():
         grid.append([])
         for j in range(0, 160):  # HERE ##################
             grid[i].append(
-                {'type': 0, 'opacity': round(random.random(0.3, 0.8), 1)})
+                {'type': 0, 'opacity': random.uniform(0.3, 0.8)})
 
     [min, max] = [7, 12]  # HERE ##################
 
@@ -101,7 +101,7 @@ class CreateDungeon():
         'width': random.randrange(min, max)
     }
 
-    grid = placeCells(grid, firstRoom, "floor")
+    grid = placeCells( firstRoom)
 
     # HERE ######################
     def growMap(self, grid, seedRooms, counter=1, maxRooms=30, firstRoom=firstRoom):
