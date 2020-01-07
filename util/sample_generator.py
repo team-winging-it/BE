@@ -86,11 +86,17 @@ class CreateDungeon():
         return [{grid, placedRooms}]
 
     grid = []
-    for i in range(0, 120):  # HERE ##################
+    GRID_HT = 120
+    GRID_WH = 160
+    i = 0
+    j = 0
+    while i < GRID_HT:
         grid.append([])
-        for j in range(0, 160):  # HERE ##################
+        for j in range(GRID_WH):
             grid[i].append(
-                {'type': 0, 'opacity': round(random.random(0.3, 0.8), 1)})
+                {'type': 0, 'opacity': round(random.random(0.3, 0.8), 1)}
+            )
+        i += 1
 
     [min, max] = [7, 12]  # HERE ##################
 
@@ -110,4 +116,7 @@ class CreateDungeon():
 
         grid = self.createRoomsFromSeed(grid, seedRooms.pop(), range=[7, 12])
         seedRooms.append(grid)
-        return self.growMap(grid, seedRooms)
+        counter += len(grid.placedRooms)
+        return self.growMap(grid, seedRooms, counter)
+
+    growMap(grid, [firstRoom])
