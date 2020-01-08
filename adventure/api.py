@@ -8,7 +8,7 @@ from .models import *
 from rest_framework.decorators import api_view
 import json
 from rest_framework import viewsets, permissions
-from .serializers import RoomSerializer
+from .serializers import RoomSerializer, PlayerSerializer
 
 # Room Viewset
 
@@ -20,6 +20,13 @@ class RoomViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = RoomSerializer
 
+
+class PlayerViewSet(viewsets.ModelViewSet):
+    queryset = Player.objects.all()
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = PlayerSerializer
 
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
