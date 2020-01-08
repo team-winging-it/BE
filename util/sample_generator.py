@@ -3,7 +3,7 @@ import random
 
 
 class CreateDungeon():
-    def __init__(self, GRID_WIDTH=40, GRID_HEIGHT=30, MAX_ROOMS=10, ROOM_SIZE_RANGE=[7, 12], grid=[], room={}):
+    def __init__(self, GRID_WIDTH=40, GRID_HEIGHT=40, MAX_ROOMS=10, ROOM_SIZE_RANGE=[5, 5], grid=[], room={}):
         self.GRID_WIDTH = GRID_WIDTH
         self.GRID_HEIGHT = GRID_HEIGHT
         self.MAX_ROOMS = MAX_ROOMS
@@ -13,8 +13,10 @@ class CreateDungeon():
 
     def isValidRoomPlacement(self, grid, room):
 
-        room['width'] = 1
-        room['height'] = 1
+
+        # room['width'] = 1
+        # room['height'] = 1
+        print("isValid", room)
 
         if room['y'] < 1 or room['y'] + room['height'] > len(grid) - 1:
             return False
@@ -24,21 +26,66 @@ class CreateDungeon():
         for i in range(room['y']-1, room['y'] + room['height'] + 1):
             for j in range(room['x']-1, room['x'] + room['width'] + 1):
                 if grid[i][j]['type'] == 'floor':
+
                     return False
         return True
 
     def placeCells(self, grid, room, type='floor'):
-        print('grid', grid)
-        print('room', room)
-        print('type', type)
-        room['width'] = 1
-        room['height'] = 1
-        for i in range(room['y'], room['y'] + room['height']):
-            for j in range(room['x'], room['x'] + room['width']):
-                grid[i][j]['type'] = type
+        # print('grid', grid)
+        # print('room', room)
+        # print('type', type)
+        # room['width'] = 3
+        # room['height'] = 5
+        print("Our Room", room, type)
+        print("--------------------------------------------------")
+        zz = room['y']
+        xx = room['x']
+        # breakpoint()
+        for i in range(room['y'], zz + room['height']):
+            u = range(room['y'], zz + room['height'])
+            print("Loop I | y", room['y'],  u)
+            room['y'] += 1
+
+            for j in range(room['x'], xx + room['width']):
+                z = range(room['x'], xx + room['width'])
+                print("loop J | x", j, z)
+                # print("type", type)
+                room['x'] += 1
+                if type == 'floor':
+                    # breakpoint()
+
+                    grid[i][j]['type'] = type
+                    # print("we got a floor", grid[i][j]['type']
+                elif type == 'door':
+                    grid[i][j]['type'] = type
+
+
+            print("next row")
+            room['x'] = xx
+
+        print("--------------------------------------------------")
         return grid
 
+        # i = room['y']
+        # j = room['x']
+        # while i < (room['y'] + room['height']):
+        #     i += 1
+        #     u = range(room['y'], room['y'] + room['height'])
+        #     print("Loop I | y", room['y'],  u)
+        #     while j < (room['x'] + room['width']):
+        #         zz = range(room['x'], room['x'] + room['width'])
+        #         print("loop J | x", j, zz)
+        #         print("type", type)
+        #         if type == 'floor':
+        #             # breakpoint()
+        #
+        #             grid[i][j]['type'] = type
+        #             print("we got a floor", grid[i][j]['type'])
+        #         j += 1
+
+
     def createRoomsFromSeed(self, grid, room, range):
+
         range = self.ROOM_SIZE_RANGE
         [mini, maxi] = [range[0], range[1]]
 
@@ -46,12 +93,14 @@ class CreateDungeon():
 
         north = {'height': random.randrange(
             mini, maxi+1), 'width': random.randrange(mini, maxi+1)}
+
         north['x'] = random.randrange(room['x'], room['x'] + room['width'])
         north['y'] = room['y'] - north['height'] - 1
         # breakpoint()
         north['doorx'] = random.randrange(north['x'], min(
             north['x'] + north['width'], room['x'] + room['width']))
         north['doory'] = room['y']-1
+
         roomValues.append(north)
 
         east = {'height': random.randrange(
@@ -80,15 +129,17 @@ class CreateDungeon():
         west['doory'] = random.randrange(west['y'], min(
             west['y'] + west['height'], room['y'] + room['height']))
         roomValues.append(west)
-
         placedRooms = []
+        print('room values', roomValues)
         for room in roomValues:
             if self.isValidRoomPlacement(grid, room):
+                print('it is vaild')
                 grid = self.placeCells(grid, room)
 
                 grid = self.placeCells(
-                    grid, {'x': room['doorx'], 'y': room['doory']}, 'door')
+                    grid, {'x': room['doorx'], 'y': room['doory'], 'height': 1, 'width': 1}, 'door')
                 placedRooms.append(room)
+                print(grid)
 
         dicti = {}
         dicti['grid'] = grid
@@ -114,31 +165,50 @@ class CreateDungeon():
 
 
 grid = []
-GRID_HT = 30
+GRID_HT = 40
 GRID_WH = 40
-i = 0
-j = 0
-while i < GRID_HT:
+ii = 0
+jj = 0
+while ii < GRID_HT:
     grid.append([])
-    for j in range(GRID_WH):
-        grid[i].append(
+    for jj in range(GRID_WH):
+
+        grid[ii].append(
             {'type': 0, 'opacity': random.uniform(0.3, 0.8)}
         )
-    i += 1
+
+    ii += 1
 
 [mini, maxi] = [7, 12]  # HERE ##################
 
 firstRoom = {
     'x': random.randrange(1, 40 - maxi - 15),
-    'y': random.randrange(1, 30 - maxi - 15),
+    'y': random.randrange(1, 40 - maxi - 15),
     'height': random.randrange(mini, maxi),
     'width': random.randrange(mini, maxi)
 }
 # breakpoint()
 dungeon = CreateDungeon()
-grid = dungeon.placeCells(grid, firstRoom)
-with open('data.json', 'w') as outfile:
-    json.dump(data, outfile)
-breakpoint()
 
-dungeon.growMap(grid, [firstRoom])
+# dungeon.placeCells(grid, firstRoom)
+
+
+
+the_grid = dungeon.growMap(grid, [firstRoom])
+
+with open('data.json', 'w') as outfile:
+    json.dump(the_grid, outfile)
+
+
+
+#     print(json.dumps(the_grid, indent=4, sort_keys=True))
+# #
+# z = 0
+# with open('data.json', 'w') as outfile:
+#     while z < GRID_HT:
+#         for n in range(GRID_WH):
+#             json.dump(argg[z][n]['type'], outfile)
+#
+#         z += 1
+#
+#     print(json.dumps(argg, indent=4, sort_keys=True))
