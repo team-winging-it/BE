@@ -213,7 +213,7 @@ dungeon.placeCells(grid, firstRoom)
 the_grid = dungeon.growMap(grid, [firstRoom])
 
 with open('data.json', 'w') as outfile:
-    json.dump(the_grid, outfile)
+    # json.dump(the_grid, outfile)
 
     for row in grid:
         row_string = ''
