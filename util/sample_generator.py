@@ -1,8 +1,9 @@
+import json
 import random
 
 
 class CreateDungeon():
-    def __init__(self, GRID_WIDTH=160, GRID_HEIGHT=120, MAX_ROOMS=30, ROOM_SIZE_RANGE=[7, 12], grid=[], room={}):
+    def __init__(self, GRID_WIDTH=40, GRID_HEIGHT=30, MAX_ROOMS=10, ROOM_SIZE_RANGE=[7, 12], grid=[], room={}):
         self.GRID_WIDTH = GRID_WIDTH
         self.GRID_HEIGHT = GRID_HEIGHT
         self.MAX_ROOMS = MAX_ROOMS
@@ -22,7 +23,7 @@ class CreateDungeon():
 
         for i in range(room['y']-1, room['y'] + room['height'] + 1):
             for j in range(room['x']-1, room['x'] + room['width'] + 1):
-                if grid[i][j].type == 'floor':
+                if grid[i][j]['type'] == 'floor':
                     return False
         return True
 
@@ -39,21 +40,22 @@ class CreateDungeon():
 
     def createRoomsFromSeed(self, grid, room, range):
         range = self.ROOM_SIZE_RANGE
-        [min, max] = [range[0], range[1]]
+        [mini, maxi] = [range[0], range[1]]
 
         roomValues = []
 
         north = {'height': random.randrange(
-            min, max+1), 'width': random.randrange(min, max+1)}
+            mini, maxi+1), 'width': random.randrange(mini, maxi+1)}
         north['x'] = random.randrange(room['x'], room['x'] + room['width'])
         north['y'] = room['y'] - north['height'] - 1
+        # breakpoint()
         north['doorx'] = random.randrange(north['x'], min(
             north['x'] + north['width'], room['x'] + room['width']))
         north['doory'] = room['y']-1
         roomValues.append(north)
 
         east = {'height': random.randrange(
-            min, max+1), 'width': random.randrange(min, max+1)}
+            mini, maxi+1), 'width': random.randrange(mini, maxi+1)}
         east['x'] = room['x'] + room['width'] + 1
         east['y'] = random.randrange(room['y'], room['height'] + room['y'])
         east['doorx'] = east['x'] - 1
@@ -62,7 +64,7 @@ class CreateDungeon():
         roomValues.append(east)
 
         south = {'height': random.randrange(
-            min, max+1), 'width': random.randrange(min, max+1)}
+            mini, maxi+1), 'width': random.randrange(mini, maxi+1)}
         south['x'] = random.randrange(room['x'], room['width'] + room['x'])
         south['y'] = room['y'] + room['height'] + 1
         south['doorx'] = random.randrange(south['x'], min(
@@ -71,7 +73,7 @@ class CreateDungeon():
         roomValues.append(south)
 
         west = {'height': random.randrange(
-            min, max+1), 'width': random.randrange(min, max+1)}
+            mini, maxi+1), 'width': random.randrange(mini, maxi+1)}
         west['x'] = room['x'] - west['width'] - 1
         west['y'] = random.randrange(room['y'], room['height'] + room['y'])
         west['doorx'] = room['x'] - 1
@@ -93,39 +95,50 @@ class CreateDungeon():
         dicti['placedRooms'] = placedRooms
 
         return dicti
-
-    grid = []
-    GRID_HT = 120
-    GRID_WH = 160
-    i = 0
-    j = 0
-    while i < GRID_HT:
-        grid.append([])
-        for j in range(GRID_WH):
-            grid[i].append(
-                {'type': 0, 'opacity': random.uniform(0.3, 0.8)}
-            )
-        i += 1
-
-    [min, max] = [7, 12]  # HERE ##################
-
-    firstRoom = {
-        'x': random.randrange(1, 160 - max - 15),
-        'y': random.randrange(1, 120 - max - 15),
-        'height': random.randrange(min, max),
-        'width': random.randrange(min, max)
-    }
-
-    grid = placeCells(grid, firstRoom)
-
     # HERE ######################
-    def growMap(self, grid, seedRooms, counter=1, maxRooms=30):
-        if counter + len(seedRooms) > maxRooms or len(seedRooms) is None:
+
+    def growMap(self, grid, seedRooms, counter=1, maxRooms=5):
+        if counter + len(seedRooms) > maxRooms or len(seedRooms) == 0:
             return grid
 
-        grid = self.createRoomsFromSeed(grid, seedRooms.pop(), range=[7, 12])
-        seedRooms.append(*grid['placedRooms'])
+        if len(seedRooms) > 0:
+            grid = self.createRoomsFromSeed(
+                grid, seedRooms.pop(), range=[7, 12])
+        # seedRooms.append(*grid['placedRooms'])
+        items = grid['placedRooms']
+        for item in items:
+            seedRooms.append(item)
+
         counter += len(grid['placedRooms'])
         return self.growMap(grid, seedRooms, counter)
 
-    growMap(grid=grid, seedRooms=[firstRoom])
+
+grid = []
+GRID_HT = 30
+GRID_WH = 40
+i = 0
+j = 0
+while i < GRID_HT:
+    grid.append([])
+    for j in range(GRID_WH):
+        grid[i].append(
+            {'type': 0, 'opacity': random.uniform(0.3, 0.8)}
+        )
+    i += 1
+
+[mini, maxi] = [7, 12]  # HERE ##################
+
+firstRoom = {
+    'x': random.randrange(1, 40 - maxi - 15),
+    'y': random.randrange(1, 30 - maxi - 15),
+    'height': random.randrange(mini, maxi),
+    'width': random.randrange(mini, maxi)
+}
+# breakpoint()
+dungeon = CreateDungeon()
+grid = dungeon.placeCells(grid, firstRoom)
+with open('data.json', 'w') as outfile:
+    json.dump(data, outfile)
+breakpoint()
+
+dungeon.growMap(grid, [firstRoom])
