@@ -215,6 +215,18 @@ the_grid = dungeon.growMap(grid, [firstRoom])
 with open('data.json', 'w') as outfile:
     json.dump(the_grid, outfile)
 
+    for row in grid:
+        row_string = ''
+        for tile in row:
+            if tile['type'] == 'floor':
+                row_string += 'f'
+            if tile['type'] == 'door':
+                row_string += 'D'
+            if tile['type'] == 0:
+                row_string += '-'
+        print(row_string)
+
+
 
 
 #     print(json.dumps(the_grid, indent=4, sort_keys=True))
