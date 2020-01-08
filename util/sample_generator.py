@@ -27,9 +27,9 @@ class CreateDungeon():
         return True
 
     def placeCells(self, grid, room, type='floor'):
-        # print('grid', grid)
-        # print('room', room)
-        # print('type', type)
+        print('grid', grid)
+        print('room', room)
+        print('type', type)
         room['width'] = 1
         room['height'] = 1
         for i in range(room['y'], room['y'] + room['height']):
