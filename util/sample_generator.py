@@ -3,7 +3,7 @@ import random
 
 
 class CreateDungeon():
-    def __init__(self, GRID_WIDTH=40, GRID_HEIGHT=40, MAX_ROOMS=10, ROOM_SIZE_RANGE=[5, 5], grid=[], room={}):
+    def __init__(self, GRID_WIDTH=40, GRID_HEIGHT=40, MAX_ROOMS=10, ROOM_SIZE_RANGE=[3, 5], grid=[], room={}):
         self.GRID_WIDTH = GRID_WIDTH
         self.GRID_HEIGHT = GRID_HEIGHT
         self.MAX_ROOMS = MAX_ROOMS
@@ -22,12 +22,21 @@ class CreateDungeon():
             return False
         if room['x'] < 1 or room['x'] + room['width'] > len(grid[0]) - 1:
             return False
+        yy = room['y']
+        xx = room['x']
+        for i in range(yy - 1, room['y'] + room['height'] + 1):
+            z = range(yy - 1, room['y'] + room['height'] + 1)
+            print("Is this Y increaseing", i, z)
+            yy += 1
+            for j in range(xx - 1 , room['x'] + room['width'] + 1):
+                u = range(xx - 1 , room['x'] + room['width'] + 1)
+                print("Is this X increaseing", j , u)
+                xx += 1
 
-        for i in range(room['y']-1, room['y'] + room['height'] + 1):
-            for j in range(room['x']-1, room['x'] + room['width'] + 1):
                 if grid[i][j]['type'] == 'floor':
-
+                    print("Room is invalid", room, grid[i][j]['type'])
                     return False
+            xx = room['x']
         return True
 
     def placeCells(self, grid, room, type='floor'):
@@ -41,19 +50,19 @@ class CreateDungeon():
         zz = room['y']
         xx = room['x']
         # breakpoint()
-        for i in range(room['y'], zz + room['height']):
-            u = range(room['y'], zz + room['height'])
-            print("Loop I | y", room['y'],  u)
-            room['y'] += 1
+        for i in range(zz, room['y'] + room['height']):
+            u = range(zz, room['y'] + room['height'])
+            print("Loop I | y", i,  u)
+            zz += 1
 
-            for j in range(room['x'], xx + room['width']):
-                z = range(room['x'], xx + room['width'])
+            for j in range(xx, room['x'] + room['width']):
+                z = range(xx, room['x'] + room['width'])
                 print("loop J | x", j, z)
                 # print("type", type)
-                room['x'] += 1
+                xx += 1
                 if type == 'floor':
                     # breakpoint()
-
+                    # breakpoint()
                     grid[i][j]['type'] = type
                     # print("we got a floor", grid[i][j]['type']
                 elif type == 'door':
@@ -61,7 +70,7 @@ class CreateDungeon():
 
 
             print("next row")
-            room['x'] = xx
+            xx = room['x']
 
         print("--------------------------------------------------")
         return grid
@@ -182,15 +191,19 @@ while ii < GRID_HT:
 [mini, maxi] = [7, 12]  # HERE ##################
 
 firstRoom = {
-    'x': random.randrange(1, 40 - maxi - 15),
-    'y': random.randrange(1, 40 - maxi - 15),
-    'height': random.randrange(mini, maxi),
-    'width': random.randrange(mini, maxi)
+    'x': 15,
+    'y': 15,
+    'height': 4,
+    'width': 4,
+    # 'x': random.randrange(1, 40 - maxi - 15),
+    # 'y': random.randrange(1, 40 - maxi - 15),
+    # 'height': random.randrange(mini, maxi),
+    # 'width': random.randrange(mini, maxi)
 }
 # breakpoint()
 dungeon = CreateDungeon()
 
-# dungeon.placeCells(grid, firstRoom)
+dungeon.placeCells(grid, firstRoom)
 
 
 
