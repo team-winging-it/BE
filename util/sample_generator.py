@@ -159,7 +159,7 @@ class CreateDungeon():
         return dicti
     # HERE ######################
 
-    def growMap(self, grid, seedRooms, counter=1, maxRooms= 10):
+    def growMap(self, grid, seedRooms, counter=1, maxRooms= 120):
         if counter + len(seedRooms) > maxRooms or len(seedRooms) == 0:
             return grid
         print("Grid in growMap", len(grid))
@@ -177,8 +177,8 @@ class CreateDungeon():
 
 
 grid = []
-GRID_HT = 40
-GRID_WH = 40
+GRID_HT = 200
+GRID_WH = 200
 ii = 0
 jj = 0
 while ii < GRID_HT:
@@ -194,8 +194,8 @@ while ii < GRID_HT:
 [mini, maxi] = [7, 12]  # HERE ##################
 
 firstRoom = {
-    'x': 10,
-    'y': 10,
+    'x': 180,
+    'y': 20,
     'height': 4,
     'width': 4,
     # 'x': random.randrange(1, 40 - maxi - 15),
