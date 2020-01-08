@@ -17,10 +17,12 @@ class CreateDungeon():
         # room['width'] = 1
         # room['height'] = 1
         print("isValid", room)
-
+        print("Grid Y" , len(grid))
         if room['y'] < 1 or room['y'] + room['height'] > len(grid) - 1:
+            print("isValid False Y ")
             return False
         if room['x'] < 1 or room['x'] + room['width'] > len(grid[0]) - 1:
+            print("isValid False X ")
             return False
         yy = room['y']
         xx = room['x']
@@ -93,7 +95,7 @@ class CreateDungeon():
         #         j += 1
 
 
-    def createRoomsFromSeed(self, grid, room, range):
+    def createRoomsFromSeed(self, grid, room):
 
         range = self.ROOM_SIZE_RANGE
         [mini, maxi] = [range[0], range[1]]
@@ -157,20 +159,21 @@ class CreateDungeon():
         return dicti
     # HERE ######################
 
-    def growMap(self, grid, seedRooms, counter=1, maxRooms=5):
+    def growMap(self, grid, seedRooms, counter=1, maxRooms= 10):
         if counter + len(seedRooms) > maxRooms or len(seedRooms) == 0:
             return grid
-
+        print("Grid in growMap", len(grid))
         if len(seedRooms) > 0:
+            print("GROW MAP! does it get here")
             grid = self.createRoomsFromSeed(
-                grid, seedRooms.pop(), range=[7, 12])
+                grid, seedRooms.pop(),)
         # seedRooms.append(*grid['placedRooms'])
         items = grid['placedRooms']
         for item in items:
             seedRooms.append(item)
 
         counter += len(grid['placedRooms'])
-        return self.growMap(grid, seedRooms, counter)
+        return self.growMap(grid['grid'], grid['placedRooms'], counter)
 
 
 grid = []
@@ -191,8 +194,8 @@ while ii < GRID_HT:
 [mini, maxi] = [7, 12]  # HERE ##################
 
 firstRoom = {
-    'x': 15,
-    'y': 15,
+    'x': 10,
+    'y': 10,
     'height': 4,
     'width': 4,
     # 'x': random.randrange(1, 40 - maxi - 15),
