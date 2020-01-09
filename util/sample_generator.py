@@ -177,7 +177,7 @@ class CreateDungeon():
 
 
 grid = []
-GRID_HT = 200
+GRID_HT = 150
 GRID_WH = 200
 ii = 0
 jj = 0
@@ -195,7 +195,7 @@ while ii < GRID_HT:
 
 firstRoom = {
     'x': 180,
-    'y': 20,
+    'y': 9,
     'height': 4,
     'width': 4,
     # 'x': random.randrange(1, 40 - maxi - 15),
