@@ -177,8 +177,8 @@ class CreateDungeon():
 
 
 grid = []
-GRID_HT = 150
-GRID_WH = 200
+GRID_HT = 40
+GRID_WH = 40
 ii = 0
 jj = 0
 while ii < GRID_HT:
@@ -194,7 +194,7 @@ while ii < GRID_HT:
 [mini, maxi] = [7, 12]  # HERE ##################
 
 firstRoom = {
-    'x': 180,
+    'x': 10,
     'y': 9,
     'height': 4,
     'width': 4,
@@ -211,21 +211,29 @@ dungeon.placeCells(grid, firstRoom)
 
 
 the_grid = dungeon.growMap(grid, [firstRoom])
+cell_list = []
+tx = 0
+ty = 0
+for row in grid:
+    row_string = ''
+
+    for tile in row:
+        if tile['type'] == 'floor':
+            row_string += 'f'
+        if tile['type'] == 'door':
+            row_string += 'D'
+        if tile['type'] == 0:
+            row_string += '-'
+        tile['x'] = tx
+        tile['y'] = ty
+        cell_list.append(tile)
+        tx += 1
+    tx = 0
+    ty += 1
+    print(row_string)
 
 with open('data.json', 'w') as outfile:
-    # json.dump(the_grid, outfile)
-
-    for row in grid:
-        row_string = ''
-        for tile in row:
-            if tile['type'] == 'floor':
-                row_string += 'f'
-            if tile['type'] == 'door':
-                row_string += 'D'
-            if tile['type'] == 0:
-                row_string += '-'
-        print(row_string)
-
+    json.dump(cell_list, outfile)
 
 
 
